@@ -1,1 +1,3 @@
-# 3d-cube
+# 3D pygame
+
+Creating perspetive using pygame library
