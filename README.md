@@ -1,3 +1,3 @@
 # 3D pygame
 
-Creating perspetive using pygame library
+Creating perspective using pygame library
