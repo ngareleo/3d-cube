@@ -1,48 +1,7 @@
 import pygame as pg
 from math import cos, sin, radians
+from Components import Window, Edge, Vert
 pg.init()
-
-
-class Window:
-    def __init__(self, sim_cube, win_dim):
-        self.game_window = pg.display.set_mode(win_dim)
-        self.is_running: bool = True
-        self.cube = sim_cube
-        self.cube.screen = self.get_window()
-        self.cube.c_window = self
-        pg.display.set_caption('3d Cube')
-
-    def get_window(self):
-        return self.game_window
-
-    def handle_events(self):
-        evs = pg.event.get()
-        roll_pool = []
-        k_pressed = True
-        y_key_pressed = False
-        for event in evs:
-            if event.type == pg.QUIT:
-                self.is_running = False
-            elif event.type == pg.K_RIGHT:
-                pass
-            elif event.type == pg.MOUSEWHEEL:
-                if y_key_pressed:
-                    print("Y PRESSED")
-                roll_pool.append(event)
-                movement = 0
-                pitch = 10 # degrees
-                for roll in roll_pool:
-                    movement += roll.y
-                self.cube.rotate_y(movement * pitch)
-                print(f"Number of rolls = {movement}")
-            elif event.type == pg.KEYDOWN:
-                # y-axis rotation
-                if event.unicode == 'y':
-                    y_key_pressed = True
-            elif event.type == pg.KEYUP:
-                if event.unicode == 'y':
-                    y_key_pressed = False
-
 
 
 class Cube:
@@ -184,48 +143,8 @@ class Cube:
             )
 
 
-class Vert:
-
-    def __init__(self, x, y, z):
-        self.original_x = x
-        self.original_y = y
-        self.original_z = z
-        self.c_X = self.original_x
-        self.c_Y = self.original_y
-        self.c_Z = self.original_z
-
-        assert (self.c_X == self.original_x)
-        assert (self.c_Y == self.original_y)
-        assert (self.c_Z == self.original_z)
-
-    def __repr__(self):
-        return f"{self.c_X}\t{self.c_Y}\t{self.c_Z}"
-
-    def __str__(self):
-        return f"{self.c_X}\t{self.c_Y}\t{self.c_Z}"
-
-
-class Edge:
-
-    def __init__(self, point_a, point_b):
-        self.point_a = point_a
-        self.point_b = point_b
-
-    def __repr__(self):
-        return f"from {self.point_a} to {self.point_b}"
-
-    def __str__(self):
-        return f"from {self.point_a} to {self.point_b}"
-
-    def render_edge(self, screen, _off):
-        pg.draw.line(screen, (0, 0, 0),
-                     (self.point_a.c_X + _off, self.point_a.c_Y + _off),
-                     (self.point_b.c_X + _off, self.point_b.c_Y + _off),
-                     2)
-
-
 window_dim = (700, 700)
-cube = Cube(200, 1.6, window_dim)
+cube = Cube(200, 3, window_dim)
 sim_window = Window(cube, window_dim)
 win = sim_window.get_window()
 clock = pg.time.Clock()
@@ -236,4 +155,3 @@ while sim_window.is_running:
     sim_window.handle_events()
     cube.render_cube()
     pg.display.flip()
-
